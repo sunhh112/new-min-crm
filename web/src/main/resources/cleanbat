@@ -1,0 +1,3 @@
+delete from  min_account ;
+delete from  min_shop ;
+delete from  min_account_shop_role ;

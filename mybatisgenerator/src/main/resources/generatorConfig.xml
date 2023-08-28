@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--导入属性配置-->
+    <properties resource="datasource.properties"/>
+
+    <!--指定特定数据库的jdbc驱动jar包的位置
+    <classPathEntry location="${db.driverLocation}"/>-->
+    <classPathEntry location="mybatisgenerator/lib/mysql-connector-java-8.0.14.jar"/>
+
+    <!-- 选择运行的mybatis版本 -->
+    <context id="lab" targetRuntime="MyBatis3">
+        <!--覆盖生成XML文件-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <plugin type="com.mincrm.MySQLLimitPlugin"></plugin>
+        <!-- optional，旨在创建class时，对注释进行控制 -->
+        <commentGenerator>
+
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!--jdbc的数据库连接 -->
+        <jdbcConnection
+                driverClass="${db.driverClassName}"
+                connectionURL="${db.url}"
+                userId="${db.username}"
+                password="${db.password}">
+        </jdbcConnection>
+
+        <!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- Model模型生成器,用来生成含有主键key的类，记录类 以及查询Example类
+            targetPackage     指定生成的model生成所在的包名
+            targetProject     指定在该项目下所在的路径
+        -->
+
+        <javaModelGenerator targetPackage="com.mincrm.entity.model" targetProject="entity/src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="false"/>
+        </javaModelGenerator>
+
+        <!--mapper xml映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
+
+        <sqlMapGenerator targetPackage="com.mincrm.entity.dao" targetProject="entity/src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
+                type="ANNOTATEDMAPPER",生成Java Model 和基于注解的Mapper对象
+                type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
+                type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
+        -->
+
+        <!-- targetPackage：dao层mapper接口生成的位置 -->
+        <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.mincrm.entity.dao"
+                             targetProject="entity/src/main/java">
+            <!-- some default config list
+            -->
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <table tableName="crm_customer">
+            <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true"/>
+        </table>
+        <!--
+        <table tableName="crm_tenant">
+            <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true"/>
+        </table>-->
+
+
+    </context>
+</generatorConfiguration>
